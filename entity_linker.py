@@ -252,6 +252,9 @@ class EntityLinkerApp(QWidget):
         self.add_links_directly(selected_occurrences, custom_name_map)
         QMessageBox.information(self, "Information", "Links added successfully.")
 
+    def same_ignoring_parentheses(self, s1, s2):
+        return re.sub(r"\(.*?\)", "", s1).strip() == re.sub(r"\(.*?\)", "", s2).strip()
+
     def add_links_directly(self, selected_occurrences, custom_name_map):
         store = {}
         for e, occ in selected_occurrences:
@@ -278,11 +281,12 @@ class EntityLinkerApp(QWidget):
                 word_in_text = text[start:end]
                 if word_in_text != o["word"]:
                     continue
-                link_text = (
-                    f"[[{custom_name_map[e['word']]}]]"
-                    if custom_name_map[e["word"]] == o["word"]
-                    else f"[[{custom_name_map[e['word']]}|{o['word']}]]"
-                )
+                if self.same_ignoring_parentheses(
+                    custom_name_map[e["word"]], o["word"]
+                ):
+                    link_text = f"[[{custom_name_map[e['word']]}]]"
+                else:
+                    link_text = f"[[{custom_name_map[e['word']]}|{o['word']}]]"
                 new_text += text[last_idx:start] + link_text
                 last_idx = end
             new_text += text[last_idx:]
