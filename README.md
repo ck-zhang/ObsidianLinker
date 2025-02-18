@@ -29,6 +29,8 @@ uv sync
 
 ## Usage
 
+⚠️ **Warning**: Make sure to back up your notes as this has only been tested by myself
+
 ```shell
 uv run entity_linker.py
 ```
