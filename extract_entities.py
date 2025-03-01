@@ -37,7 +37,7 @@ def get_ner_pipeline():
 
 
 def remove_links(text):
-    return re.sub(r"\[\[.*?\]\]", lambda m: " " * (m.end() - m.start()), text)
+    return re.sub(r"\[\[(.*?)\]\]", r"\1", text)
 
 
 def find_largest_safe_batch_size(ner_pipe, dataset, start_bs=32):
